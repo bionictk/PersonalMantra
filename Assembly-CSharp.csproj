@@ -61,6 +61,7 @@
      <Compile Include="Assets\Scripts\FilterButton.cs" />
      <Compile Include="Assets\Scripts\GazeGestureManager.cs" />
      <Compile Include="Assets\Scripts\SpeechManager.cs" />
+     <Compile Include="Assets\Scripts\SubVisManager.cs" />
      <Compile Include="Assets\Scripts\VisManager.cs" />
      <Compile Include="Assets\Scripts\VoiceCommands.cs" />
      <Compile Include="Assets\Scripts\WorldCursor.cs" />

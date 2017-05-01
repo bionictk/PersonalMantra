@@ -1,7 +1,7 @@
 ﻿
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 public class DatapointCreater : MonoBehaviour
@@ -9,6 +9,7 @@ public class DatapointCreater : MonoBehaviour
     public TextAsset csvFile;
     public GameObject pointPrimitive;
     public GameObject Asia, EU, ME, NA, SA, SSA;
+    public GameObject subVis;
     private string[,] grid;
     private GameObject newGroup;
 
@@ -17,7 +18,7 @@ public class DatapointCreater : MonoBehaviour
         grid = SplitCsvGrid(csvFile.text);
         //Debug.Log("size = " + (1 + grid.GetUpperBound(0)) + "," + (1 + grid.GetUpperBound(1)));
 
-        createDatapoints(grid);
+        createDatapoints(grid);        
         //movingShape = GameObject.Instantiate(shapePrimitive) as GameObject;
         //movingShape.SetActive(true);
         //lemon.GetComponent<Renderer>().material.color = new Color(0.0f, 1.0f, 1.0f, 1.0f);
@@ -27,6 +28,7 @@ public class DatapointCreater : MonoBehaviour
 
     void createDatapoints(string[,] grid)
     {
+        IDictionary<string, Countries> data = new Dictionary<string, Countries>();
         for (int row = 1; row < grid.GetUpperBound(1); row++)
         {
             GameObject newPoint = GameObject.Instantiate(pointPrimitive) as GameObject;
@@ -71,12 +73,23 @@ public class DatapointCreater : MonoBehaviour
             newPoint.GetComponent<Renderer>().material.color = newPoint.transform.parent.Find("Button").gameObject.GetComponent<Renderer>().material.color;
             newPoint.transform.parent.Find("Button").gameObject.GetComponent<FilterButton>().country = grid[4, row];
             newPoint.transform.localPosition = new Vector3((100.0f + int.Parse(grid[1, row])) * 0.004945f, 0.0f, (180.0f - int.Parse(grid[2, row])) * 0.00397f);
-           /* if (row == 1)
+            /* if (row == 1)
+             {
+                 Debug.Log(newPoint.transform.position);
+                 Debug.Log(newPoint.transform.localPosition);
+             }    */
+
+            //collect data for bar chart
+            if (data.ContainsKey(grid[4, row]))
             {
-                Debug.Log(newPoint.transform.position);
-                Debug.Log(newPoint.transform.localPosition);
-            }    */        
+                data[grid[4, row]].addCountry(grid[0, row], float.Parse(grid[3, row]));
+            }
+            else
+            {
+                data.Add(grid[4, row], new Countries(grid[0, row], float.Parse(grid[3, row])));
+            }            
         }
+        GameObject.Find("SubVis").GetComponent<SubVisManager>().createBars(data);
     }
     // outputs the content of a 2D array, useful for checking the importer
     
@@ -123,7 +136,7 @@ public class DatapointCreater : MonoBehaviour
                 //outputGrid[x, y] = outputGrid[x, y].Replace("\"\"", "\"");
             }
         }
-        Debug.Log(outputGrid);
+        //Debug.Log(outputGrid);
         return outputGrid;
     }
 
@@ -135,74 +148,33 @@ public class DatapointCreater : MonoBehaviour
                                                                                                             System.Text.RegularExpressions.RegexOptions.ExplicitCapture)
                 select m.Groups[1].Value).ToArray();
     }
-    /*
-    void DrawPoints()
-    {
-        Vector3 nextPosition = new Vector3();
-        Vector3 prevPosition = new Vector3();
-        int pointCount = 0, buttonLines = 0;
-        for (int line = 0; line < grid.GetUpperBound(1); line++)
-        {
-            switch (grid[0, line])
-            {
-                case "AIM":
-                    //Debug.Log(grid[2, time]);
-                    float lemonID = float.Parse(grid[2, line]);
-                    if (lemonID == -999) break;
-                    if (lastLemonID != lemonID)
-                    {
-
-                        shapeColor = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), 1.0f);
-                        lastLemonID = lemonID;
-                        GameObject newButton = GameObject.Instantiate(buttonShape) as GameObject;
-                        newButton.transform.parent = groupbutton.transform;
-                        newButton.transform.localPosition = new Vector3((lemonIDList.Count % 5) * 0.05f, buttonLines * (-0.05f), 0);
-                        newButton.transform.Find("Canvas/MidGraphics/MidText").gameObject.GetComponent<Text>().text = "" + (lemonIDList.Count + 1);
-                        newButton.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 0));
-                        newButton.SetActive(true);
-                        newGroup = new GameObject("Group" + lemonID);
-                        //newButton.transform.Find("Button").gameObject.GetComponent<GroupButtonScript>().pointGroup = newGroup;
-                        newGroup.transform.parent = transform;
-                        newGroup.transform.localPosition = new Vector3(0, 0, 0);
-                        //newGroup.AddComponent<SpeechBubble>();
-                        lemonIDList.Add(lemonID);
-                        if (lemonIDList.Count % 5 == 0) buttonLines++;
-                    }
-                    pointCount++;
-                    nextPosition = new Vector3(float.Parse(grid[6, line]), float.Parse(grid[7, line]), float.Parse(grid[8, line]));
-                    nextPosition = nextPosition * scale;
-                    GameObject shape = GameObject.Instantiate(shapePrimitive) as GameObject;
-                    shape.transform.parent = newGroup.transform;
-                    shape.transform.localScale = Vector3.one * thickness;
-                    shape.transform.localPosition = nextPosition;
-                    shape.SetActive(true);
-                    shape.GetComponent<Renderer>().material.color = new Color(shapeColor.r, shapeColor.g, shapeColor.b, shapeColor.a);
-                    /*if (pointCount > 0) {
-                    //int n = Mathf.CeilToInt (180 * Mathf.Abs (Vector3.Distance (prevPosition, nextPosition))); //change n proportional to distance
-                        int n=1;
-                        //Debug.Log(n);
-                    /	for (int i=1; i<n; i++) {
-                            //lerp and draw
-                            GameObject shape1 = GameObject.Instantiate (shapePrimitive) as GameObject;
-                            shape1.transform.parent = transform;
-                            shape1.transform.localScale = Vector3.one * thickness;
-                            shape1.transform.localPosition = Vector3.Lerp (prevPosition, nextPosition, (float)i / n);
-                            shape1.SetActive (true);
-                            shape1.GetComponent<Renderer> ().material.color = new Color (shapeColor.r, shapeColor.g, shapeColor.b, shapeColor.a);
-                        }
-                    }
-                    prevPosition = nextPosition;
-                    break;
-                default:
-                    //Debug.Log (grid[0,line]);
-                    break;
-            }
-        }
-        Debug.Log("Points drawn : " + pointCount);
-    }
-    */
+   
     public void Update()
     {
 
     }
+}
+
+public class Countries
+{
+    public float maxGDP = 0.0f;
+    public string[] name;
+    public float[] gdp;
+    public int count = 0;
+
+    public Countries(string nm = "", float g = 0.0f)
+    {
+        name = new string[15];
+        gdp = new float[15];
+        addCountry(nm, g);
+    }
+
+    public void addCountry(string nm = "", float g = 0.0f)
+    {
+        name[count] = nm;
+        gdp[count] = g;
+        maxGDP = maxGDP < g ? g : maxGDP;
+        count++;
+    }
+
 }
