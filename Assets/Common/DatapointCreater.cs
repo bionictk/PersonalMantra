@@ -37,7 +37,7 @@ public class DatapointCreater : MonoBehaviour
         string textOutput = "";
         for (int y = 0; y < grid.GetUpperBound(1); y++)
         {
-            for (int x = 0; x < grid.GetUpperBound(0) - 1; x++)
+            for (int x = 0; x < grid.GetUpperBound(0); x++)
             {
 
                 textOutput += grid[x, y];
@@ -52,7 +52,7 @@ public class DatapointCreater : MonoBehaviour
     static public string[,] SplitCsvGrid(string csvText)
     {
         string[] lines = csvText.Split("\n"[0]);
-
+        //Debug.Log(lines.Length);
         // finds the max width of row
         int width = 0;
         for (int i = 0; i < lines.Length; i++)
@@ -65,17 +65,17 @@ public class DatapointCreater : MonoBehaviour
         string[,] outputGrid = new string[width + 1, lines.Length + 1];
         for (int y = 0; y < lines.Length; y++)
         {
-            string[] row = SplitCsvLine(lines[y]);
+            string[] row = SplitCsvLine(lines[y]);            
             for (int x = 0; x < row.Length; x++)
             {
                 outputGrid[x, y] = row[x];
-
+                //Debug.Log(row[x]);
                 // This line was to replace "" with " in my output. 
                 // Include or edit it as you wish.
-                outputGrid[x, y] = outputGrid[x, y].Replace("\"\"", "\"");
+                //outputGrid[x, y] = outputGrid[x, y].Replace("\"\"", "\"");
             }
         }
-
+        Debug.Log(outputGrid);
         return outputGrid;
     }
 
