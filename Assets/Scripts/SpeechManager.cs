@@ -12,7 +12,7 @@ public class SpeechManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        keywords.Add("Show trend", () =>
+        keywords.Add("Show trends", () =>
         {
             // Call the OnReset method on every descendant object.
             this.BroadcastMessage("ShowBars");
@@ -24,18 +24,59 @@ public class SpeechManager : MonoBehaviour
             this.BroadcastMessage("Hide");
         });
 
-        keywords.Add("Filter asia", () =>
+        keywords.Add("Filter Asia", () =>
         {
             // Call the OnReset method on every descendant object.
-            this.BroadcastMessage("ShowPoints", "asia");
+            this.BroadcastMessage("ShowPoints", "Asia");
         });
 
-        keywords.Add("Filter europe", () =>
+        keywords.Add("Filter Europe", () =>
         {
             // Call the OnReset method on every descendant object.
-            this.BroadcastMessage("ShowPoints", "europe");
+            this.BroadcastMessage("ShowPoints", "Europe");
         });
 
+        keywords.Add("Filter Middle East", () =>
+        {
+            // Call the OnReset method on every descendant object.
+            this.BroadcastMessage("ShowPoints", "Middle East");
+        });
+
+        keywords.Add("Filter North America", () =>
+        {
+            // Call the OnReset method on every descendant object.
+            this.BroadcastMessage("ShowPoints", "N. America");
+        });
+
+        keywords.Add("Filter South America", () =>
+        {
+            // Call the OnReset method on every descendant object.
+            this.BroadcastMessage("ShowPoints", "S. America");
+        });
+
+        keywords.Add("Filter Sub-Saharan Africa", () =>
+        {
+            // Call the OnReset method on every descendant object.
+            this.BroadcastMessage("ShowPoints", "Sub-Saharan Africa");
+        });
+
+        keywords.Add("Filter countries with GDP larger than 5000", () =>
+        {
+            // Call the OnReset method on every descendant object.
+            this.BroadcastMessage("filterExample", 5000);
+        });
+
+        keywords.Add("Filter GDP", () =>
+        {
+            // Call the OnReset method on every descendant object.
+            this.BroadcastMessage("filterExample", 16000);
+        });
+
+        keywords.Add("Show all", () =>
+        {
+            // Call the OnReset method on every descendant object.
+            this.BroadcastMessage("ShowPoints", "force");
+        });
 
         keywords.Add("Toggle hovering", () =>
         {

@@ -17,7 +17,13 @@ public class FilterButton : MonoBehaviour {
 	}
 
     void OnHit()
-    {
-        parent.BroadcastMessage("TogglePoints", country);
+    {        
+        if (country == "clear")
+        {
+            parent.BroadcastMessage("Hide");
+        } else
+        {
+            parent.BroadcastMessage("TogglePoints", country);
+        }
     }
 }

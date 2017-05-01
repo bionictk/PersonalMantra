@@ -7,32 +7,80 @@ using System.Linq;
 public class DatapointCreater : MonoBehaviour
 {
     public TextAsset csvFile;
-    public GameObject shapePrimitive;
-    public int speed = 5;
-    public bool showAllPoints = true;
-
+    public GameObject pointPrimitive;
+    public GameObject Asia, EU, ME, NA, SA, SSA;
     private string[,] grid;
-    private int time = 0;
-    GameObject movingShape;
-    GameObject lemon;
-    private float lastLemonID = -98765;
     private GameObject newGroup;
-    public ArrayList lemonIDList = new ArrayList();
 
     public void Start()
     {
         grid = SplitCsvGrid(csvFile.text);
-        Debug.Log("size = " + (1 + grid.GetUpperBound(0)) + "," + (1 + grid.GetUpperBound(1)));
-        
+        //Debug.Log("size = " + (1 + grid.GetUpperBound(0)) + "," + (1 + grid.GetUpperBound(1)));
+
+        createDatapoints(grid);
         //movingShape = GameObject.Instantiate(shapePrimitive) as GameObject;
         //movingShape.SetActive(true);
         //lemon.GetComponent<Renderer>().material.color = new Color(0.0f, 1.0f, 1.0f, 1.0f);
         
-        DebugOutputGrid(grid); 
+        //DebugOutputGrid(grid); 
     }
 
+    void createDatapoints(string[,] grid)
+    {
+        for (int row = 1; row < grid.GetUpperBound(1); row++)
+        {
+            GameObject newPoint = GameObject.Instantiate(pointPrimitive) as GameObject;
+            newPoint.SetActive(true);            
+            /*
+            if (row == 1)
+            {
+                Debug.Log(grid[1, row]);
+                Debug.Log(int.Parse(grid[1, row]));
+                Debug.Log((100.0f + int.Parse(grid[1, row])));
+                Debug.Log((100.0f + int.Parse(grid[1, row])) * 0.004945f);
+            }*/
+            newPoint.transform.Find("Label").gameObject.GetComponent<TextMesh>().text = "Country: " + grid[0, row] + "\nTrust: " + grid[1, row] + "\nEase of doing business: " + grid[2, row] + "\nGDP: " + grid[3, row] + "\nRegion: " + grid[4, row];
+            newPoint.GetComponent<Datapoint>().country = grid[4, row];
+            newPoint.GetComponent<Datapoint>().GDP = float.Parse(grid[3, row]);
+
+            if (grid[4, row] == "Asia") 
+            {
+                newPoint.transform.parent = Asia.transform;                
+            }
+            else if (grid[4, row] == "Europe")
+            {
+                newPoint.transform.parent = EU.transform;
+            }
+            else if (grid[4, row] == "N. America")
+            {
+                newPoint.transform.parent = NA.transform;
+            }
+            else if (grid[4, row] == "S. America")
+            {
+                newPoint.transform.parent = SA.transform;
+            }
+            else if (grid[4, row] == "Middle East")
+            {
+                newPoint.transform.parent = ME.transform;
+            }
+            else if (grid[4, row] == "Sub-Saharan Africa")
+            {
+                newPoint.transform.parent = SSA.transform;
+            }
+
+            newPoint.GetComponent<Renderer>().material.color = newPoint.transform.parent.Find("Button").gameObject.GetComponent<Renderer>().material.color;
+            newPoint.transform.parent.Find("Button").gameObject.GetComponent<FilterButton>().country = grid[4, row];
+            newPoint.transform.localPosition = new Vector3((100.0f + int.Parse(grid[1, row])) * 0.004945f, 0.0f, (180.0f - int.Parse(grid[2, row])) * 0.00397f);
+           /* if (row == 1)
+            {
+                Debug.Log(newPoint.transform.position);
+                Debug.Log(newPoint.transform.localPosition);
+            }    */        
+        }
+    }
     // outputs the content of a 2D array, useful for checking the importer
-    static public void DebugOutputGrid(string[,] grid)
+    
+    void DebugOutputGrid(string[,] grid)
     {
         string textOutput = "";
         for (int y = 0; y < grid.GetUpperBound(1); y++)
@@ -45,11 +93,11 @@ public class DatapointCreater : MonoBehaviour
             }
             textOutput += "\n";
         }
-        Debug.Log(textOutput);
+        //Debug.Log(textOutput);
     }
 
     // splits a CSV file into a 2D string array
-    static public string[,] SplitCsvGrid(string csvText)
+    public string[,] SplitCsvGrid(string csvText)
     {
         string[] lines = csvText.Split("\n"[0]);
         //Debug.Log(lines.Length);
@@ -80,7 +128,7 @@ public class DatapointCreater : MonoBehaviour
     }
 
     // splits a CSV row 
-    static public string[] SplitCsvLine(string line)
+    string[] SplitCsvLine(string line)
     {
         return (from System.Text.RegularExpressions.Match m in System.Text.RegularExpressions.Regex.Matches(line,
                                                                                                             @"(((?<x>(?=[,\r\n]+))|""(?<x>([^""]|"""")+)""|(?<x>[^,\r\n]+)),?)",

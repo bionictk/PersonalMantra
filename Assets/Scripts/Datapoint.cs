@@ -11,6 +11,7 @@ public class Datapoint : MonoBehaviour {
     Color oldColor;
     Color hoverColor;
     bool forceShowing = false;
+    public float GDP = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -52,7 +53,13 @@ public class Datapoint : MonoBehaviour {
 
     void ShowPoints(string filter)
     {
-        if (filter == country)
+        if (filter == country || filter == "force")
+            showing = true;
+    }
+
+    void filterExample(int filter)
+    {
+        if (filter < GDP)
             showing = true;
     }
 
