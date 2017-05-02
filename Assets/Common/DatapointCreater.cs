@@ -155,26 +155,3 @@ public class DatapointCreater : MonoBehaviour
     }
 }
 
-public class Countries
-{
-    public float maxGDP = 0.0f;
-    public string[] name;
-    public float[] gdp;
-    public int count = 0;
-
-    public Countries(string nm = "", float g = 0.0f)
-    {
-        name = new string[15];
-        gdp = new float[15];
-        addCountry(nm, g);
-    }
-
-    public void addCountry(string nm = "", float g = 0.0f)
-    {
-        name[count] = nm;
-        gdp[count] = g;
-        maxGDP = maxGDP < g ? g : maxGDP;
-        count++;
-    }
-
-}
