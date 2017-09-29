@@ -67,6 +67,7 @@
      <Compile Include="Assets\Scripts\VisManager.cs" />
      <Compile Include="Assets\Scripts\VoiceCommands.cs" />
      <Compile Include="Assets\Scripts\WorldCursor.cs" />
+     <Compile Include="Assets\SetFocusPointForVideoCapture.cs" />
      <Compile Include="Assets\Vuforia\Scripts\BackgroundPlaneBehaviour.cs" />
      <Compile Include="Assets\Vuforia\Scripts\CloudRecoBehaviour.cs" />
      <Compile Include="Assets\Vuforia\Scripts\CylinderTargetBehaviour.cs" />

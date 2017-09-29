@@ -43,7 +43,6 @@ namespace Vuforia
         }
 
 
-
         /// <summary>
         /// This method inserts new dataset search roots for datasets defined in StreamingAssets/QCAR.  This may
         /// be used to streamline the "Split Application Binary" Unity feature under the Android plugin.  This method is 

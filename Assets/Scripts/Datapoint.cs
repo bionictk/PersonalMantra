@@ -4,6 +4,7 @@ using System.Collections;
 public class Datapoint : MonoBehaviour {
 
     public string country;
+    public string countryname; // this should be country and country should be continent
     bool showing = false;
     GameObject label = null;
     float timer;

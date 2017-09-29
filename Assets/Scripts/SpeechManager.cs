@@ -10,6 +10,7 @@ public class SpeechManager : MonoBehaviour
     public GameObject cursor;
     SubVisManager subVis;
     public GameObject filterlist;
+    public GameObject usa;
     
     // Use this for initialization
     void Start()
@@ -21,6 +22,12 @@ public class SpeechManager : MonoBehaviour
             this.BroadcastMessage("ShowBars");
         });
 
+        keywords.Add("Hide trends", () =>
+        {
+            // Call the OnReset method on every descendant object.
+            this.BroadcastMessage("HideBars");
+        });
+
         keywords.Add("Clear filter", () =>
         {
             // Call the OnReset method on every descendant object.
@@ -29,8 +36,29 @@ public class SpeechManager : MonoBehaviour
             filterlist.GetComponent<FilterList>().clearList();
         });
 
+        keywords.Add("Clear highlights", () =>
+        {
+            // Call the OnReset method on every descendant object.
+            this.BroadcastMessage("Hide");
+            subVis.clear();
+            filterlist.GetComponent<FilterList>().clearList();
+        });
 
-        keywords.Add("Filter Asia", () =>
+        string[] countryList = { "Asia", "Europe", "Middle East", "North America", "South America", "Sub-Saharan Africa" };
+        string[] countryListShort = { "Asia", "Europe", "Middle East", "N. America", "S. America", "Sub-Saharan Africa" };
+
+        for (int i = 0; i<countryList.Length; i++)
+        {
+            keywords.Add("Filter " + countryList[i], () =>
+            {
+                // Call the OnReset method on every descendant object.
+                this.BroadcastMessage("ShowPoints", countryListShort[i]);
+                subVis.show(countryListShort[i]);
+                filterlist.GetComponent<FilterList>().addList(countryListShort[i]);
+            });
+        }
+
+        keywords.Add("Highlight Asia", () =>
         {
             // Call the OnReset method on every descendant object.
             this.BroadcastMessage("ShowPoints", "Asia");
@@ -38,7 +66,8 @@ public class SpeechManager : MonoBehaviour
             filterlist.GetComponent<FilterList>().addList("Asia");
         });
 
-        keywords.Add("Filter Europe", () =>
+
+        keywords.Add("Highlight Europe", () =>
         {
             // Call the OnReset method on every descendant object.
             this.BroadcastMessage("ShowPoints", "Europe");
@@ -46,7 +75,7 @@ public class SpeechManager : MonoBehaviour
             filterlist.GetComponent<FilterList>().addList("Europe");
         });
 
-        keywords.Add("Filter Middle East", () =>
+        keywords.Add("Highlight Middle East", () =>
         {
             // Call the OnReset method on every descendant object.
             this.BroadcastMessage("ShowPoints", "Middle East");
@@ -54,7 +83,7 @@ public class SpeechManager : MonoBehaviour
             filterlist.GetComponent<FilterList>().addList("Middle East");
         });
 
-        keywords.Add("Filter North America", () =>
+        keywords.Add("Highlight North America", () =>
         {
             // Call the OnReset method on every descendant object.
             this.BroadcastMessage("ShowPoints", "N. America");
@@ -62,7 +91,7 @@ public class SpeechManager : MonoBehaviour
             filterlist.GetComponent<FilterList>().addList("N. America");
         });
 
-        keywords.Add("Filter South America", () =>
+        keywords.Add("Highlight South America", () =>
         {
             // Call the OnReset method on every descendant object.
             this.BroadcastMessage("ShowPoints", "S. America");
@@ -70,7 +99,7 @@ public class SpeechManager : MonoBehaviour
             filterlist.GetComponent<FilterList>().addList("S. America");
         });
 
-        keywords.Add("Filter Sub-Saharan Africa", () =>
+        keywords.Add("Highlight Sub-Saharan Africa", () =>
         {
             // Call the OnReset method on every descendant object.
             this.BroadcastMessage("ShowPoints", "Sub-Saharan Africa");
@@ -78,18 +107,20 @@ public class SpeechManager : MonoBehaviour
             filterlist.GetComponent<FilterList>().addList("Sub-Saharan Africa");
         });
 
-        keywords.Add("Filter countries with GDP larger than 5000", () =>
+        /// OTHER COMMANDS
+        /// 
+        keywords.Add("Highlight countries with GDP larger than 5000", () =>
         {
             // Call the OnReset method on every descendant object.
             this.BroadcastMessage("filterExample", 5000);
-            filterlist.GetComponent<FilterList>().addList("GDP > 5000");
+            filterlist.GetComponent<FilterList>().addList("GDP > 5,000");
         });
 
-        keywords.Add("Filter GDP", () =>
+        keywords.Add("Filter GDP below 10000", () =>
         {
             // Call the OnReset method on every descendant object.
-            this.BroadcastMessage("filterExample", 16000);
-            filterlist.GetComponent<FilterList>().addList("GDP > 16000");
+            this.BroadcastMessage("filterExample", 10000);
+            filterlist.GetComponent<FilterList>().addList("GDP > 10,000");
         });
 
         keywords.Add("Show all", () =>
@@ -105,7 +136,20 @@ public class SpeechManager : MonoBehaviour
             cursor.SendMessage("hovering");
         });
 
+        keywords.Add("Find the United States", () =>
+        {
+            usa.SendMessage("OnHover");
+        });
 
+        keywords.Add("Find U.S.A.", () =>
+        {
+            usa.SendMessage("OnHover");
+        });
+
+        keywords.Add("Find the United States of America", () =>
+        {
+            usa.SendMessage("OnHover");
+        });
         // Tell the KeywordRecognizer about our keywords.
         keywordRecognizer = new KeywordRecognizer(keywords.Keys.ToArray());
 

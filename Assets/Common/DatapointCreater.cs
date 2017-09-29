@@ -43,6 +43,11 @@ public class DatapointCreater : MonoBehaviour
             }*/
             newPoint.transform.Find("Label").gameObject.GetComponent<TextMesh>().text = "Country: " + grid[0, row] + "\nTrust: " + grid[1, row] + "\nEase of doing business: " + grid[2, row] + "\nGDP: " + grid[3, row] + "\nRegion: " + grid[4, row];
             newPoint.GetComponent<Datapoint>().country = grid[4, row];
+            //newPoint.GetComponent<Datapoint>().countryname = grid[0, row];
+            if (grid[0, row] == "United States")
+            {
+                GameObject.Find("MainVis").GetComponent<SpeechManager>().usa = newPoint;
+            }
             newPoint.GetComponent<Datapoint>().GDP = float.Parse(grid[3, row]);
 
             if (grid[4, row] == "Asia") 
@@ -71,6 +76,11 @@ public class DatapointCreater : MonoBehaviour
             }
 
             newPoint.GetComponent<Renderer>().material.color = newPoint.transform.parent.Find("Button").gameObject.GetComponent<Renderer>().material.color;
+            /* if (grid[4, row] == "Asia") // Try grey colors for filtering. Result: Not good.
+            {
+                newPoint.GetComponent<Renderer>().material.color = new Color(0.1f, 0.1f, 0.1f, 1.0f);
+                newPoint.transform.localScale *= 1.1f;
+            } */
             newPoint.transform.parent.Find("Button").gameObject.GetComponent<FilterButton>().country = grid[4, row];
             newPoint.transform.localPosition = new Vector3((100.0f + int.Parse(grid[1, row])) * 0.004945f, 0.0f, (180.0f - int.Parse(grid[2, row])) * 0.00397f);
             /* if (row == 1)

@@ -33,6 +33,11 @@ public class Aisle : MonoBehaviour {
         showing = true;
     }
 
+    void HideBars()
+    {
+        showing = false;
+    }
+
     void Hide()
     {
         showing = false;

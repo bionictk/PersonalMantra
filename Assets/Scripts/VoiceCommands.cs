@@ -23,12 +23,12 @@ using Vuforia;
 public class VoiceCommands : MonoBehaviour
 {
 
-// So that this builds against older versions of the Unity DLLs we need to 
-// #if the code that uses HoloLens specific features out.
-// Unity have suggested that UNITY_HOLOGRAPHIC should be defined but we
+    // So that this builds against older versions of the Unity DLLs we need to 
+    // #if the code that uses HoloLens specific features out.
+    // Unity have suggested that UNITY_HOLOGRAPHIC should be defined but we
     // have not seen this work
 #if HOLOLENS_API_AVAILABLE
-    
+    public AudioClip removeAudio;
     #region PRIVATE_MEMBERS
     KeywordRecognizer keywordRecognizer = null;
     Dictionary<string, System.Action> keywords = new Dictionary<string, System.Action>();
@@ -70,6 +70,17 @@ public class VoiceCommands : MonoBehaviour
                 }
             }
             Debug.Log("Stop Extended Tracking");
+        });
+
+        keywords.Add("Stop Vuforia", () =>
+        {
+            this.GetComponent<VuforiaBehaviour>().enabled = false;
+            AudioSource.PlayClipAtPoint(removeAudio, Camera.main.transform.position);
+        });
+
+        keywords.Add("Start Vuforia", () =>
+        {
+            this.GetComponent<VuforiaBehaviour>().enabled = true;
         });
 
         // Tell the KeywordRecognizer about our keywords.

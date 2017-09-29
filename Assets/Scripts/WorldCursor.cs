@@ -3,7 +3,7 @@
 public class WorldCursor : MonoBehaviour
 {
     private MeshRenderer meshRenderer;
-    bool hover = true;
+    bool hover = false;
 
     // Use this for initialization
     void Start()

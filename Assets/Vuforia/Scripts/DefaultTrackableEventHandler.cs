@@ -11,6 +11,8 @@ namespace Vuforia
     /// <summary>
     /// A custom handler that implements the ITrackableEventHandler interface.
     /// </summary>
+    ///
+    
     public class DefaultTrackableEventHandler : MonoBehaviour,
                                                 ITrackableEventHandler
     {
@@ -38,7 +40,8 @@ namespace Vuforia
 
 
         #region PUBLIC_METHODS
-
+        public bool started = false;
+        public GameObject plane;
         /// <summary>
         /// Implementation of the ITrackableEventHandler function called when the
         /// tracking state changes.
@@ -52,10 +55,12 @@ namespace Vuforia
                 newStatus == TrackableBehaviour.Status.EXTENDED_TRACKED)
             {
                 OnTrackingFound();
+                started = true;
+                plane.GetComponent<Renderer>().enabled = false;
             }
             else
             {
-                OnTrackingLost();
+                if (!started) OnTrackingLost();
             }
         }
 
