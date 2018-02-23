@@ -1,0 +1,6 @@
+# VisAR: Bringing Interactivity to Static Data Visualizations through Augmented Reality
+Static visualizations have analytic and expressive value. However, many interactive tasks cannot be completed using static visualizations. As datasets grow in size and complexity, static visualizations start losing their analytic and expressive power for interactive data exploration. Despite this limitation of static visualizations, there are still many cases where visualizations are limited to being static (e.g., visualizations on presentation slides or posters). We believe in many of these cases, static visualizations will benefit from allowing users to perform interactive tasks on them.<br>
+Inspired by the introduction of numerous commercial personal augmented reality (AR) devices, we propose an AR solution that allows interactive data exploration of datasets on static visualizations. In particular, we present a prototype system named VisAR that uses the Microsoft Hololens to enable users to complete interactive tasks on static visualizations.<br>
+
+## Target platform
+The current version of VisAR targets the Microsoft Hololens. Unity is used as the development tool. Please follow the official Unity for Hololens guide by Microsoft/Unity to get started.
